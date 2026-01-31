@@ -1,0 +1,7 @@
+name = "post-purchase-message"
+type = "checkout_post_purchase"
+metafields = []
+
+[build]
+command = ""
+path = ""
