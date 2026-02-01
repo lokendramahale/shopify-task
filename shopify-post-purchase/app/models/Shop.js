@@ -20,4 +20,5 @@ const shopSchema = new mongoose.Schema({
   }
 });
 
-export default mongoose.model('Shop', shopSchema);
+export default mongoose.models.Shop ||
+  mongoose.model("Shop", shopSchema);

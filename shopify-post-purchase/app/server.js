@@ -4,14 +4,13 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-import connectDB from './config/database.js';
+import {connectDB} from './db.server';
 import Shop from './models/Shop.js';
-
-const app = express();
-const PORT = process.env.PORT || 3000;
 
 // Connect to MongoDB
 connectDB();
+const app = express();
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
@@ -297,7 +296,7 @@ app.get('/', (req, res) => {
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`📊 MongoDB: ${process.env.MONGODB_URI || 'mongodb://localhost:27017/shopify-app'}`);
+  console.log(`📊 MongoDB: ${process.env.MONGODB_URI}`);
 });
 
 export default app;

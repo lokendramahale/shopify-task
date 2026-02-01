@@ -1,11 +1,12 @@
-import { PrismaClient } from "@prisma/client";
+import mongoose from "mongoose";
 
-if (process.env.NODE_ENV !== "production") {
-  if (!global.prismaGlobal) {
-    global.prismaGlobal = new PrismaClient();
-  }
+let isConnected = false;
+
+export async function connectMongo() {
+  if (isConnected) return;
+
+  console.log("⏳ Connecting to MongoDB...");
+  await mongoose.connect(process.env.MONGODB_URI);
+  isConnected = true;
+  console.log("✅ MongoDB connected");
 }
-
-const prisma = global.prismaGlobal ?? new PrismaClient();
-
-export default prisma;

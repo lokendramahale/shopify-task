@@ -1,16 +1,19 @@
-import { authenticate } from "../shopify.server";
-import db from "../db.server";
+import { connectMongo } from "../db.server";
+import Shop from "../models/Shop";
 
 export const action = async ({ request }) => {
-  const { shop, session, topic } = await authenticate.webhook(request);
+  const payload = await request.json();
 
-  console.log(`Received ${topic} webhook for ${shop}`);
+  const shop = payload?.shop_domain;
 
-  // Webhook requests can trigger multiple times and after an app has already been uninstalled.
-  // If this webhook already ran, the session may have been deleted previously.
-  if (session) {
-    await db.session.deleteMany({ where: { shop } });
+  if (!shop) {
+    return new Response("No shop domain", { status: 200 });
   }
 
-  return new Response();
+  await connectMongo();
+  await Shop.deleteOne({ shopDomain: shop });
+
+  console.log(`🗑️ App uninstalled for shop: ${shop}`);
+
+  return new Response("OK", { status: 200 });
 };
